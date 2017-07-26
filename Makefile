@@ -161,7 +161,7 @@ jessie-minimal-pine64: jessie-minimal-pine64-$(RELEASE_NAME)-$(RELEASE).img.xz
 jessie-openmediavault-pine64: jessie-openmediavault-pine64-$(RELEASE_NAME)-$(RELEASE).img.xz
 
 .PHONY: xenial-retroarch-pine64
-xenial-retroarcht-pine64: xenial-retroarch-pine64-$(RELEASE_NAME)-$(RELEASE).img.xz
+xenial-retroarch-pine64: xenial-retroarch-pine64-$(RELEASE_NAME)-$(RELEASE).img.xz
 
 .PHONY: zesty-pinebook
 zesty-pinebook: zesty-minimal-pinebook zesty-mate-pinebook zesty-i3-pinebook
