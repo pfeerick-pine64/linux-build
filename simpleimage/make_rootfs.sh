@@ -222,6 +222,10 @@ EOF
 			openmediavault)
 				do_chroot /usr/local/sbin/install_openmediavault.sh
 				;;
+
+			retroarch)
+				do_dhroot /usr/local/sbin/isntall_retroarch.sh
+				;;
 		esac
 		do_chroot systemctl enable ssh-keygen
 		if [ "$MODEL" = "pinebook" ]; then
