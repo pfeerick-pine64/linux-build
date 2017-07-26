@@ -85,7 +85,12 @@ case $DISTRO in
 		;;
 	xenial|zesty)
 		version=$(curl -s https://api.github.com/repos/$RELEASE_REPO/releases/latest | jq -r ".tag_name")
-		ROOTFS="https://github.com/$RELEASE_REPO/releases/download/${version}/ubuntu-${DISTRO}-${VARIANT}-${version}-${BUILD_ARCH}.tar.xz"
+		case $VARIANT in
+			retroarch)
+				ROOTFS="https://github.com/$RELEASE_REPO/releases/download/${version}/ubuntu-${DISTRO}-minimal-${version}-${BUILD_ARCH}.tar.xz"
+			*)
+				ROOTFS="https://github.com/$RELEASE_REPO/releases/download/${version}/ubuntu-${DISTRO}-${VARIANT}-${version}-${BUILD_ARCH}.tar.xz"
+		esac
 		TAR_OPTIONS="-J --strip-components=1 binary"
 		;;
 	sid|jessie|stretch)
@@ -93,6 +98,7 @@ case $DISTRO in
 		ROOTFS="https://github.com/$RELEASE_REPO/releases/download/${version}/debian-${DISTRO}-${VARIANT}-${version}-${BUILD_ARCH}.tar.xz"
 		TAR_OPTIONS="-J --strip-components=1 binary"
 		;;
+
 	*)
 		echo "Unknown distribution: $DISTRO"
 		exit 1
