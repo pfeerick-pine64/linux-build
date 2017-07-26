@@ -233,7 +233,7 @@ EOF
 				;;
 
 			retroarch)
-				do_chroot /usr/local/sbin/isntall_retroarch.sh
+				do_chroot /usr/local/sbin/install_retroarch.sh
 				;;
 		esac
 		do_chroot systemctl enable ssh-keygen
