@@ -23,6 +23,9 @@ apt-get install libsdl1.2-dev libsdl1.2debian pkg-config build-essential -y
 #Adds libretro and installs retroarch
 apt-get install retroarch* libretro* -y
 
+#Install Samba for SMB file shares
+apt-get install samba samba-common-bin -y
+
 #Adds aufan's ppa for armsoc and libmali
 apt-get install -y xserver-xorg-video-armsoc-sunxi libmali-sunxi-utgard0-r6p0
 
