@@ -72,6 +72,20 @@ DEFAULT_CFG="/etc/retroarch.cfg"
 cp ${DEFAULT_CFG} /etc/retroarch.cfg.stock
 sed -i '/# video_fullscreen = false/c\video_fullscreen = true' ${DEFAULT_CFG}
 
+#Sets up SMB sharefolder for ROMs and BIOS
+mkdir -pv /home/pine64/ROMs
+chown nobody:nogroup -R /home/pine64/ROMs
+ 
+echo "[ROMs]
+comment = ROMs Folder
+path = /home/pine64/ROMs
+writeable = yes
+browseable = yes
+guest ok = yes
+create mask = 0644
+directory mask = 2777
+" >> /etc/samba/smb.conf
+
 #Enables mali + drm
 exec /usr/local/sbin/pine64_enable_sunxidrm.sh
 
