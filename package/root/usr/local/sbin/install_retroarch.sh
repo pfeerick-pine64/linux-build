@@ -101,7 +101,7 @@ sed -i '/# audio_device =/c\# audio_device = "hw:0,0"' ${DEFAULT_CFG} #analog au
 #Set up SMB sharefolder for ROMs and BIOS
 mkdir -pv /home/pine64/ROMs
 chown nobody:nogroup -R /home/pine64/ROMs
- 
+
 cat >> /etc/samba/smb.conf <<EOF
 [ROMs]
 comment = ROMs Folder
