@@ -18,7 +18,7 @@ apt-get update -y
 apt-get install x-window-system xterm twm -y
 
 #Necessary dependencies
-apt-get install libsdl1.2-dev libsdl1.2debian pkg-config build-essential pulseaudio -y
+apt-get install libsdl1.2-dev libsdl1.2debian pkg-config build-essential alsa-base pulseaudio -y
 
 #Adds libretro and installs retroarch
 apt-get install retroarch* libretro* -y
