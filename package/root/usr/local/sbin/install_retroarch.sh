@@ -87,7 +87,9 @@ chmod -x /etc/update-motd.d/11-pine-a64-help-text
 usermod pine64 -aG tty
 
 #allow passwordless shutdown
+cat >> /etc/sudoers <<EOF
 pine64 ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown
+EOF
 
 #backup stock default config and customise
 DEFAULT_CFG="/etc/retroarch.cfg"
