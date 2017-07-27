@@ -98,7 +98,7 @@ EOF
 DEFAULT_CFG="/etc/retroarch.cfg"
 cp ${DEFAULT_CFG} /etc/retroarch.cfg.stock
 sed -i '/# video_fullscreen = false/c\video_fullscreen = true' ${DEFAULT_CFG} #fullscreen
-sed -i '/# audio_device =/c\# audio_device = "hw:0,0"' ${DEFAULT_CFG} #analog audio
+#sed -i '/# audio_device =/c\# audio_device = "hw:0,0"' ${DEFAULT_CFG} #analog audio
 #sed -i '/# audio_device =/c\# audio_device = "hw:1,0"' ${DEFAULT_CFG} #HDMI audio
 
 #Set up SMB sharefolder for ROMs and BIOS
