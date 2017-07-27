@@ -48,6 +48,7 @@ chmod +x /etc/profile.d/10-start-retroarch.sh
 
 #change hostname (will also update motd banner)
 echo "retroarch" > /etc/hostname
+sed -i "s/pine64/retroarch/g" /etc/hosts
 
 #retropie header
 cat > /etc/update-motd.d/05-figlet <<EOF
