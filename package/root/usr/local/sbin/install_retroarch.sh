@@ -64,6 +64,9 @@ chmod -x /etc/update-motd.d/11-pine-a64-help-text
 #prevent any tty permission X.org errors
 usermod pine64 -aG tty
 
+#allow passwordless shutdown
+pine64 ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown
+
 #backup stock default config and customise
 DEFAULT_CFG="/etc/retroarch.cfg"
 cp ${DEFAULT_CFG} /etc/retroarch.cfg.stock
