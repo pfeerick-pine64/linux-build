@@ -39,10 +39,10 @@ systemctl enable getty@tty1.service
 cat > /etc/profile.d/10-start-retroarch.sh <<EOF
 # autolaunch retroarch if not serial console login
 if [ -z "\$DISPLAY" ] && [ "\$(tty)" != "/dev/ttyS0" ]; then
-  /usr/local/bin/powerdown-on-retroarch-close.sh &
-  echo -e "\n\nRetroarch will start momentarily...\n\n"
-  sleep 2
-startx retroarch
+	/usr/local/bin/powerdown-on-retroarch-close.sh &
+	echo -e "\n\nRetroarch will start momentarily...\n\n"
+	sleep 2
+	startx retroarch
 fi
 EOF
 chmod +x /etc/profile.d/10-start-retroarch.sh
@@ -53,12 +53,12 @@ cat > /usr/local/bin/powerdown-on-retroarch-close.sh <<EOF
 
 #wait for retroarch
 while [[ \$(pgrep retroarch | wc -l) -eq 0 ]]; do
-    sleep 2
+	sleep 2
 done
 
 #wait for retroarch to close
 while [[ \$(pgrep retroarch | wc -l) -ne 0 ]]; do
-    sleep 2
+	sleep 2
 done
 
 #shutdown system
