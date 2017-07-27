@@ -94,10 +94,14 @@ cat >> /etc/sudoers <<EOF
 pine64 ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown
 EOF
 
+#download custom wallpaper from extras repo
+curl -L -o "/home/pine64/pine64-retroarch-wallpaper.png" https://github.com/pfeerick-pine64/linux-extras/raw/master/retroarch/
+
 #backup stock default config and customise
 DEFAULT_CFG="/etc/retroarch.cfg"
 cp ${DEFAULT_CFG} /etc/retroarch.cfg.stock
 sed -i '/# video_fullscreen = false/c\video_fullscreen = true' ${DEFAULT_CFG} #fullscreen
+sed -i '/# menu_wallpaper =/c\# menu_wallpaper = "/home/pine64/pine64-retroarch-wallpaper.png"' ${DEFAULT_CFG} #custom wallpaper
 #sed -i '/# audio_device =/c\# audio_device = "hw:0,0"' ${DEFAULT_CFG} #analog audio
 #sed -i '/# audio_device =/c\# audio_device = "hw:1,0"' ${DEFAULT_CFG} #HDMI audio
 
