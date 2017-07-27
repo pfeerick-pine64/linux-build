@@ -39,12 +39,33 @@ systemctl enable getty@tty1.service
 cat > /etc/profile.d/10-start-retroarch.sh <<EOF
 # autolaunch retroarch if not serial console login
 if [ -z "\$DISPLAY" ] && [ "\$(tty)" != "/dev/ttyS0" ]; then
-echo -e "\n\nRetroarch will start momentarily...\n\n"
-sleep 2
+  /usr/local/bin/powerdown-on-retroarch-close.sh &
+  echo -e "\n\nRetroarch will start momentarily...\n\n"
+  sleep 2
 startx retroarch
 fi
 EOF
 chmod +x /etc/profile.d/10-start-retroarch.sh
+
+#shutdown script run when retroarch autolaunched
+cat > /usr/local/bin/powerdown-on-retroarch-close.sh <<EOF
+#!/bin/bash
+
+#wait for retroarch
+while [[ \$(pgrep retroarch | wc -l) -eq 0 ]]; do
+    sleep 2
+done
+
+#wait for retroarch to close
+while [[ \$(pgrep retroarch | wc -l) -ne 0 ]]; do
+    sleep 2
+done
+
+#shutdown system
+echo -e "\n\nRetroarch no longer running... powering off system!\n\n"
+sudo /sbin/poweroff
+EOF
+chmod +x /usr/local/bin/powerdown-on-retroarch-close.sh
 
 #change hostname (will also update motd banner)
 echo "retroarch" > /etc/hostname
@@ -73,11 +94,12 @@ DEFAULT_CFG="/etc/retroarch.cfg"
 cp ${DEFAULT_CFG} /etc/retroarch.cfg.stock
 sed -i '/# video_fullscreen = false/c\video_fullscreen = true' ${DEFAULT_CFG}
 
-#Sets up SMB sharefolder for ROMs and BIOS
+#Set up SMB sharefolder for ROMs and BIOS
 mkdir -pv /home/pine64/ROMs
 chown nobody:nogroup -R /home/pine64/ROMs
  
-echo "[ROMs]
+cat >> /etc/samba/smb.conf <<EOF
+[ROMs]
 comment = ROMs Folder
 path = /home/pine64/ROMs
 writeable = yes
@@ -85,7 +107,7 @@ browseable = yes
 guest ok = yes
 create mask = 0644
 directory mask = 2777
-" >> /etc/samba/smb.conf
+EOF
 
 #Enables mali + drm
 exec /usr/local/sbin/pine64_enable_sunxidrm.sh
