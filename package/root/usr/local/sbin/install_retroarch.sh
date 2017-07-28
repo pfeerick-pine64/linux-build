@@ -9,25 +9,57 @@ fi
 #echo commands and arguments, and exit if any command returns non-zero status
 set -xe
 
-#add repositories and update
+#add repositories
 add-apt-repository ppa:libretro/testing -y
 apt-add-repository -y ppa:ayufan/pine64-ppa -y
-apt-get update -y
 
 #Installs x for retroarch to run in
-apt-get install x-window-system xterm twm -y
+PACKAGES=(
+	x-window-system
+	xterm
+	twm
+	)
 
 #Necessary dependencies
-apt-get install libsdl1.2-dev libsdl1.2debian pkg-config build-essential alsa-base pulseaudio -y
+PACKAGES+=(
+	libsdl1.2-dev
+	libsdl1.2debian
+	pkg-config
+	build-essential
+	pulseaudio
+	)
 
-#Adds libretro and installs retroarch
-apt-get install retroarch* libretro* -y
+#Add libretro and retroarch
+PACKAGES+=(
+	retroarch*
+	libretro*
+	)
 
-#Install Samba for SMB file shares
-apt-get install samba samba-common-bin -y
+#Add Samba for SMB file shares
+PACKAGES+=(
+	samba
+	samba-common-bin
+	)
 
-#Adds aufan's ppa for armsoc and libmali
-apt-get install -y xserver-xorg-video-armsoc-sunxi libmali-sunxi-utgard0-r6p0
+#Adds defaults from install_desktop
+PACKAGES+=(
+	xserver-xorg-video-armsoc-sunxi
+	libmali-sunxi-utgard0-r6p0
+	)
+
+# Install
+apt-get update -y
+apt-get -y --no-install-recommends install ${PACKAGES[@]}
+
+# Kill parport module loading, not available on arm64.
+if [ -e "/etc/modules-load.d/cups-filters.conf" ]; then
+	echo "" >/etc/modules-load.d/cups-filters.conf
+fi
+
+# Disable Pulseaudio timer scheduling which does not work with sndhdmi driver.
+if [ -e "/etc/pulse/default.pa" ]; then
+	sed -i 's/load-module module-udev-detect$/& tsched=0/g' /etc/pulse/default.pa
+fi
 
 #enable autologin
 mkdir -pv /etc/systemd/system/getty@tty1.service.d/
