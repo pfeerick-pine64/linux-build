@@ -234,6 +234,7 @@ EOF
 
 			retroarch)
 				do_chroot /usr/local/sbin/install_retroarch.sh
+				do_chroot systemctl set-default graphical.target
 				;;
 		esac
 		do_chroot systemctl enable ssh-keygen
