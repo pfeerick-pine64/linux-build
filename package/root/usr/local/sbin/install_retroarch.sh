@@ -61,15 +61,6 @@ if [ -e "/etc/pulse/default.pa" ]; then
 	sed -i 's/load-module module-udev-detect$/& tsched=0/g' /etc/pulse/default.pa
 fi
 
-#enable autologin
-mkdir -pv /etc/systemd/system/getty@tty1.service.d/
-cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf <<EOF
-[Service]
-ExecStart=
-ExecStart=-/sbin/agetty --autologin pine64 --noclear %I 38400 linux
-EOF
-systemctl enable getty@tty1.service
-
 #change hostname (will also update motd banner)
 echo "retroarch" > /etc/hostname
 sed -i "s/pine64/retroarch/g" /etc/hosts
