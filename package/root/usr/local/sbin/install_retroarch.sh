@@ -9,56 +9,66 @@ fi
 #echo commands and arguments, and exit if any command returns non-zero status
 set -xe
 
-#add repositories
+#add repositories and update
 add-apt-repository ppa:libretro/testing -y
 apt-add-repository -y ppa:ayufan/pine64-ppa -y
+apt-get update -y
 
 #Installs x for retroarch to run in
-PACKAGES=(
-	x-window-system
-	xterm
-	twm
-	)
+apt-get install x-window-system xterm twm -y
 
 #Necessary dependencies
-PACKAGES+=(
-	libsdl1.2-dev
-	libsdl1.2debian
-	pkg-config
-	build-essential
-	)
+apt-get install libsdl1.2-dev libsdl1.2debian pkg-config build-essential -y
 
-#Add libretro and retroarch
-PACKAGES+=(
-	retroarch*
-	libretro*
-	)
+#Adds libretro and installs retroarch
+apt-get install retroarch* libretro* -y
 
-#Add Samba for SMB file shares
-PACKAGES+=(
-	samba
-	samba-common-bin
-	)
+#Install Samba for SMB file shares
+apt-get install samba samba-common-bin -y
 
-#Adds defaults from install_desktop
-PACKAGES+=(
-	xserver-xorg-video-armsoc-sunxi
-	libmali-sunxi-utgard0-r6p0
-	)
+#Adds aufan's ppa for armsoc and libmali
+apt-get install -y xserver-xorg-video-armsoc-sunxi libmali-sunxi-utgard0-r6p0
 
-# Install
-apt-get update -y
-apt-get -y --no-install-recommends install ${PACKAGES[@]}
+#enable autologin
+mkdir -pv /etc/systemd/system/getty@tty1.service.d/
+cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf <<EOF
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin pine64 --noclear %I 38400 linux
+EOF
+systemctl enable getty@tty1.service
 
-# Kill parport module loading, not available on arm64.
-if [ -e "/etc/modules-load.d/cups-filters.conf" ]; then
-	echo "" >/etc/modules-load.d/cups-filters.conf
+#Autostart retroarch on login
+cat > /etc/profile.d/10-start-retroarch.sh <<EOF
+# autolaunch retroarch if not serial console login
+if [ -z "\$DISPLAY" ] && [ "\$(tty)" != "/dev/ttyS0" ]; then
+	/usr/local/bin/powerdown-on-retroarch-close.sh &
+	echo -e "\n\nRetroarch will start momentarily...\n\n"
+	sleep 2
+	startx retroarch
 fi
+EOF
+chmod +x /etc/profile.d/10-start-retroarch.sh
 
-# Disable Pulseaudio timer scheduling which does not work with sndhdmi driver.
-if [ -e "/etc/pulse/default.pa" ]; then
-	sed -i 's/load-module module-udev-detect$/& tsched=0/g' /etc/pulse/default.pa
-fi
+#shutdown script run when retroarch autolaunched
+cat > /usr/local/bin/powerdown-on-retroarch-close.sh <<EOF
+#!/bin/bash
+
+#wait for retroarch
+while [[ \$(pgrep retroarch | wc -l) -eq 0 ]]; do
+	sleep 2
+done
+
+#wait for retroarch to close
+while [[ \$(pgrep retroarch | wc -l) -ne 0 ]]; do
+	sleep 2
+done
+
+#shutdown system
+echo -e "\n\nRetroarch no longer running... powering off system!\n\n"
+sudo /sbin/poweroff
+EOF
+chmod +x /usr/local/bin/powerdown-on-retroarch-close.sh
 
 #change hostname (will also update motd banner)
 echo "retroarch" > /etc/hostname
@@ -84,14 +94,10 @@ cat >> /etc/sudoers <<EOF
 pine64 ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown
 EOF
 
-#download custom wallpaper from extras repo
-curl -L -o "/home/pine64/pine64-retroarch-wallpaper.png" https://github.com/pfeerick-pine64/linux-extras/raw/master/retroarch/
-
 #backup stock default config and customise
 DEFAULT_CFG="/etc/retroarch.cfg"
 cp ${DEFAULT_CFG} /etc/retroarch.cfg.stock
 sed -i '/# video_fullscreen = false/c\video_fullscreen = true' ${DEFAULT_CFG} #fullscreen
-sed -i '/# menu_wallpaper =/c\# menu_wallpaper = "/home/pine64/pine64-retroarch-wallpaper.png"' ${DEFAULT_CFG} #custom wallpaper
 #sed -i '/# audio_device =/c\# audio_device = "hw:0,0"' ${DEFAULT_CFG} #analog audio
 #sed -i '/# audio_device =/c\# audio_device = "hw:1,0"' ${DEFAULT_CFG} #HDMI audio
 
