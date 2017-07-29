@@ -26,7 +26,6 @@ PACKAGES+=(
 	libsdl1.2debian
 	pkg-config
 	build-essential
-	pulseaudio
 	)
 
 #Add libretro and retroarch
