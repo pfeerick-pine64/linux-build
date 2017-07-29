@@ -123,13 +123,12 @@ EOF
 #download custom wallpaper from extras repo
 curl -L -o "/home/pine64/pine64-retroarch-wallpaper.png" https://github.com/pfeerick-pine64/linux-extras/raw/master/retroarch/
 
-#backup stock default config and customise
+#backup stock default config
 DEFAULT_CFG="/etc/retroarch.cfg"
 cp ${DEFAULT_CFG} /etc/retroarch.cfg.stock
-sed -i '/# video_fullscreen = false/c\video_fullscreen = true' ${DEFAULT_CFG} #fullscreen
-sed -i '/# menu_wallpaper =/c\# menu_wallpaper = "/home/pine64/pine64-retroarch-wallpaper.png"' ${DEFAULT_CFG} #custom wallpaper
-#sed -i '/# audio_device =/c\# audio_device = "hw:0,0"' ${DEFAULT_CFG} #analog audio
-#sed -i '/# audio_device =/c\# audio_device = "hw:1,0"' ${DEFAULT_CFG} #HDMI audio
+
+#download optimised version
+curl -L -o ${DEFAULT_CFG} https://raw.githubusercontent.com/pfeerick-pine64/linux-extras/master/retroarch/optimised_config
 
 #Set up SMB sharefolder for ROMs and BIOS
 mkdir -pv /home/pine64/ROMs
