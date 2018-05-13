@@ -60,11 +60,11 @@ linux-pine64-package-$(RELEASE_NAME).deb: package package/rtk_bt/rtk_hciattach/r
 		--deb-compression bzip2 \
 		--after-install package/scripts/postinst.deb \
 		--before-remove package/scripts/prerm.deb \
-		--url https://gitlab.com/ayufan-pine64/linux-build \
+		--url https://gitlab.com/pfeerick-pine64/linux-build \
 		--description "Pine A64 Linux support package" \
-		-m "Kamil Trzciński <ayufan@ayufan.eu>" \
+		-m "Peter Feerick <peter.feerick@gmail.com>" \
 		--license "MIT" \
-		--vendor "Kamil Trzciński" \
+		--vendor "Peter Feerick" \
 		-a arm64 \
 		--config-files /var/lib/alsa/asound.state \
 		package/root/=/ \
