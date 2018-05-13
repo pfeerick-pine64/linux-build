@@ -18,7 +18,7 @@ DISTRO="$4"
 BOOT="$5"
 MODEL="$6"
 VARIANT="$7"
-RELEASE_REPO=ayufan-rock64/linux-rootfs
+RELEASE_REPO=pfeerick-rock64/linux-rootfs
 BUILD_ARCH=arm64
 
 if [ -z "$MODEL" ]; then

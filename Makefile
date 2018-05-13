@@ -2,13 +2,13 @@ export RELEASE_NAME ?= 0.1~dev
 export RELEASE ?= 1
 export LINUX_BRANCH ?= my-hacks-1.2-with-drm
 export BOOT_TOOLS_BRANCH ?= with-drm
-LINUX_LOCALVERSION ?= -ayufan-$(RELEASE)
+LINUX_LOCALVERSION ?= -pfeerick-$(RELEASE)
 
 all: linux-pinebook linux-pine64 linux-sopine
 
 linux/.git:
 	git clone --depth=1 --branch=$(LINUX_BRANCH) --single-branch \
-		https://github.com/ayufan-pine64/linux-pine64.git linux
+		https://github.com/pfeerick-pine64/linux-pine64.git linux
 
 linux/.config: linux/.git
 	make -C linux ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-" clean CONFIG_ARCH_SUN50IW1P1=y
@@ -38,7 +38,7 @@ kernel/initrd.gz: busybox/busybox
 	cd kernel/ && ./make_initrd.sh
 
 boot-tools/.git:
-	git clone --single-branch --depth=1 --branch=$(BOOT_TOOLS_BRANCH) https://github.com/ayufan-pine64/boot-tools
+	git clone --single-branch --depth=1 --branch=$(BOOT_TOOLS_BRANCH) https://github.com/pfeerick-pine64/boot-tools
 
 boot-tools: boot-tools/.git
 
