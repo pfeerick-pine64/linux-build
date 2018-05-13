@@ -94,7 +94,7 @@ simple-image-pinebook-$(RELEASE_NAME).img: linux-pine64-$(RELEASE_NAME).tar.xz b
 		export uboot=../boot-tools/boot/pine64/u-boot-pine64-pinebook.bin && \
 		bash ./make_simpleimage.sh $(shell readlink -f "$@") 150 $(shell readlink -f linux-pine64-$(RELEASE_NAME).tar.xz)
 
-BUILD_SYSTEMS := xenial zesty jessie stretch
+BUILD_SYSTEMS := xenial jessie stretch
 BUILD_VARIANTS := minimal mate i3 openmediavault
 BUILD_ARCHS := arm64
 BUILD_MODELS := pine64 pinebook sopine
@@ -121,23 +121,14 @@ linux-package: linux-pine64-package-$(RELEASE_NAME).deb
 .PHONY: simple-image-pinebook-$(RELEASE_NAME).img
 simple-image-pinebook: simple-image-pinebook-$(RELEASE_NAME).img
 
-.PHONY: zesty-minimal-pinebook
-zesty-minimal-pinebook: zesty-minimal-pinebook-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
-
 .PHONY: xenial-mate-pinebook
-zesty-mate-pinebook: zesty-mate-pinebook-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
+zesty-mate-pinebook: xenial-mate-pinebook-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
 
 .PHONY: xenial-i3-pinebook
-zesty-i3-pinebook: zesty-i3-pinebook-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
+zesty-i3-pinebook: xenial-i3-pinebook-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
 
 .PHONY: xenial-minimal-pinebook
 xenial-minimal-pinebook: xenial-minimal-pinebook-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
-
-.PHONY: xenial-mate-pinebook
-xenial-mate-pinebook: xenial-mate-pinebook-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
-
-.PHONY: xenial-i3-pinebook
-xenial-i3-pinebook: xenial-i3-pinebook-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
 
 .PHONY: stretch-minimal-pine64
 stretch-minimal-pine64: stretch-minimal-pine64-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
@@ -160,9 +151,6 @@ jessie-minimal-pine64: jessie-minimal-pine64-$(RELEASE_NAME)-$(RELEASE).img.xz
 .PHONY: jessie-openmediavault-pine64
 jessie-openmediavault-pine64: jessie-openmediavault-pine64-$(RELEASE_NAME)-$(RELEASE).img.xz
 
-.PHONY: zesty-pinebook
-zesty-pinebook: zesty-minimal-pinebook zesty-mate-pinebook zesty-i3-pinebook
-
 .PHONY: xenial-pinebook
 xenial-pinebook: xenial-minimal-pinebook xenial-mate-pinebook xenial-i3-pinebook
 
@@ -172,20 +160,14 @@ stretch-pinebook: stretch-minimal-pinebook
 .PHONY: linux-pinebook
 linux-pinebook: xenial-pinebook stretch-pinebook jessie-minimal-pinebook
 
-.PHONY: zesty-minimal-pine64
-zesty-minimal-pine64: zesty-minimal-pine64-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
-
 .PHONY: xenial-minimal-pine64
 xenial-minimal-pine64: xenial-minimal-pine64-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
 
 .PHONY: linux-pine64
-linux-pine64: zesty-minimal-pine64 xenial-minimal-pine64 stretch-minimal-pine64 jessie-minimal-pine64
-
-.PHONY: zesty-minimal-sopine
-zesty-minimal-sopine: zesty-minimal-sopine-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
+linux-pine64: xenial-minimal-pine64 stretch-minimal-pine64 jessie-minimal-pine64
 
 .PHONY: xenial-minimal-sopine
  xenial-minimal-sopine: xenial-minimal-sopine-bspkernel-$(RELEASE_NAME)-$(RELEASE).img.xz
 
 .PHONY: linux-sopine
-linux-sopine: zesty-minimal-sopine xenial-minimal-sopine stretch-minimal-sopine jessie-minimal-sopine
+linux-sopine: xenial-minimal-sopine stretch-minimal-sopine jessie-minimal-sopine
